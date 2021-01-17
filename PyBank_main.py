@@ -1,8 +1,10 @@
 import os
 import csv
 
+#read csv
 pybank_csv = os.path.join("Resources", "budget_data.csv")
 
+#default variable values
 total_months = 0
 PL_Total = 0
 
@@ -19,11 +21,12 @@ with open(pybank_csv) as csv_file:
 	#skip header
 	next(csv_reader)
 
+	#count of total months
 	for row in csv_reader:
 		total_months += 1
 		PL_Total = PL_Total + int(row[1])
 		
-
+		#determine monthly change, then max profit increase and min loss
 		if row[0] != "Jan-2010":		#first data row doesn't count
 			Monthly_chg = int(row[1]) - prior_month
 			Monthly_chg_total = Monthly_chg_total + Monthly_chg
@@ -40,9 +43,10 @@ with open(pybank_csv) as csv_file:
 
 		prior_month = int(row[1])		
 
-
+#find average monthly change in profit/loss
 Monthly_chg_avg = round(Monthly_chg_total/(total_months-1),2)
 
+#print to terminal
 print('Financial Analysis')
 print('-----------------------------')
 print(f'Total Months: {total_months}')	
@@ -51,7 +55,7 @@ print(f'Average Change: ${Monthly_chg_avg}')
 print(f'Greatest Increase in Profits: {Monthly_chg_max[0]} (${Monthly_chg_max[1]})')
 print(f'Greatest Decrease in Profits: {Monthly_chg_min[0]} (${Monthly_chg_min[1]})')
 
-
+#create text file with results
 with open("pybank_output.txt","w",newline="") as datafile:
 	writer = csv.writer(datafile)
 
